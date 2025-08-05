@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+/* @config '../../tailwind.config.js' */
+
+
+:root {
+    --background: #ededed;
+    --foreground: #0a0a0a;
+
+      /* ===== BORDER COLORS ===== */
+  --border-light: #E5E7EB;
+  --border-medium: #D1D5DB;
+  --border-dark: #9CA3AF;
+
+  
+  /* ===== TRANSITION VALUES ===== */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.3s ease-in-out;
+  --transition-slow: 0.5s ease-in-out;
+  
+  /* ===== SHADOW VALUES ===== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1F2937;
+    --foreground: #ededed;
+  }
+
+}
+
+@theme{
+
+  /* ===== PRIMARY COLORS ===== */
+  --color-primary-mint: #7FFFD4;
+  --color-primary-mint-light: #B3FFE6;
+  --color-primary-mint-dark: #4DFFCC;
+  --color-primary-mint-darker: #1AFFB8;
+
+  /* ===== SECONDARY COLORS ===== */
+  --color-secondary-teal: #20B2AA;
+  --color-secondary-teal-light: #48D1CC;
+  --color-secondary-teal-dark: #008B8B;
+  --color-secondary-gray: #6B7280;
+  --color-secondary-gray-light: #9CA3AF;
+  --color-secondary-gray-dark: #4B5563;
+
+  /* ===== ACCENT COLORS ( FOR ALERT MESSAGES) ===== */
+  --color-accent-blue: #3B82F6;
+  --color-accent-green: #10B981;
+  --color-accent-orange: #F59E0B;
+  --color-accent-red: #EF4444;
+
+  /* ===== SHADOW VALUES ===== */
+  --shadow-mint: 0 4px 14px 0 rgba(127, 255, 212, 0.3);
+
+}
+
+ 
+/* ===== UNIVERSAL RESET ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== ROOT STYLES ===== */
+html {
+  scroll-behavior: smooth;
+  font-size: 18px; /* Base font size */
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--color-text-primary-light);
+  background-color: var(--color-bg-primary-light);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== TYPOGRAPHY SYSTEM ===== */
+
+/* HEADING SIZES */
+
+.text-heading-lg {
+  font-size: 3.5rem;     /* 56px */
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.text-heading-md{
+  font-size: 2.75rem;    /* 44px */
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.text-heading-sm{
+ font-size: 2.25rem;    /* 36px */
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* BODY SIZES */
+
+.text-body-lg{
+  font-size: 1.125rem;   /* 18px */
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.text-body-md{
+  font-size: 1rem;       /* 16px */
+  font-weight: 400;
+  line-height: 1.6;  
+}
+
+.text-body-sm{
+  font-size: 0.875rem;   /* 14px */
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.775rem;
+  font-weight: 100;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary-mint);
+  color: var(--color-text-primary-light);
+  box-shadow: var(--shadow-mint);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-mint-dark);
+  transform: translateY(-1px);                  /* subtle elevation on hover */
+  box-shadow: var(--shadow-lg);                 /* deeper shadow on hover */
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-text-primary-light);
+  border: 1px solid var(--border-medium);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-bg-secondary-light);
+  border-color: var(--color-primary-mint);
+  transform: translateY(-1px);  
+  box-shadow: var(--shadow-mint);
+}
