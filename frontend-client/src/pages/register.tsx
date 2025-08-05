@@ -7,7 +7,6 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-
 import {
   Form,
   FormControl,
@@ -33,12 +32,9 @@ const RegisterPage = () => {
   };
 
   return (
-    <div
-      className=" w-screen h-screen flex items-center justify-center
-        border border-green-500 "
-    >
+    <div className=" w-screen h-screen flex items-center justify-center font-sans">
       <ModalCard>
-        <h1 className="text-body-lg">Sign Up</h1>
+        <h1 className="text-body-lg font-sans">Sign Up</h1>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -50,12 +46,11 @@ const RegisterPage = () => {
                 control={form.control}
                 name="username"
                 render={({ field }) => (
-                  <FormItem
-                  className="w-full">
-                    <FormLabel>Username</FormLabel>
+                  <FormItem className="w-full">
+                    {/* <FormLabel>Username</FormLabel> */}
                     <FormControl>
                       <Input
-                        className="!p-2"
+                        className="!border-0 border-b-2 border-blue-200 !rounded-none !p-2 focus:border-b-2 focus:border-primary focus:outline-none"
                         placeholder="username"
                         {...field}
                       />
@@ -67,12 +62,11 @@ const RegisterPage = () => {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem
-                  className="w-full">
-                    <FormLabel>Email</FormLabel>
+                  <FormItem className="w-full">
+                    {/* <FormLabel>Email</FormLabel> */}
                     <FormControl>
                       <Input
-                        className="!p-2"
+                        className="!border-0 border-b-2 border-blue-200 !rounded-none !p-2 focus:border-b-2 focus:border-primary focus:outline-none"
                         type="email"
                         placeholder="email"
                         {...field}
@@ -88,10 +82,10 @@ const RegisterPage = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  {/* <FormLabel>Password</FormLabel> */}
                   <FormControl>
                     <Input
-                      className="!p-2"
+                      className="!border-0 border-b-2 border-blue-200 !rounded-none !p-2 focus:border-b-2 focus:border-primary focus:outline-none"
                       type="password"
                       placeholder="password"
                       {...field}
@@ -106,10 +100,10 @@ const RegisterPage = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  {/* <FormLabel>Confirm Password</FormLabel> */}
                   <FormControl>
                     <Input
-                      className="!p-2"
+                      className="!border-0 border-b-2 border-blue-200 !rounded-none !p-2 focus:border-b-2 focus:border-primary focus:outline-none"
                       type="password"
                       placeholder="Re-enter password"
                       {...field}
@@ -120,12 +114,9 @@ const RegisterPage = () => {
             />
           </form>
 
-
-        <Button
-        type="submit"
-        className="btn-primary w-full"> 
+          <Button type="submit" className="btn-primary w-full">
             Log In
-        </Button>
+          </Button>
         </Form>
       </ModalCard>
     </div>
