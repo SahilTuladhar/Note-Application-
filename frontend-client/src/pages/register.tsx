@@ -2,7 +2,7 @@ import ModalCard from "../components/modalCard";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../schemas/authSchema";
-import type { LoginFormInputs, SignUpInputs } from "../schemas/authSchema";
+import type { SignUpInputs } from "../schemas/authSchema";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -12,13 +12,13 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
 const RegisterPage = () => {
   const form = useForm<SignUpInputs>({
     resolver: zodResolver(signupSchema),
+    mode: "onBlur",
     defaultValues: {
       email: "",
       password: "",
@@ -27,8 +27,9 @@ const RegisterPage = () => {
     },
   });
 
-  const onSubmit = (data: LoginFormInputs) => {
-    console.log("Login Data", data);
+  const onSubmit = (data: SignUpInputs) => {
+    console.log("Register Data", data);
+    form.reset()
   };
 
   return (
@@ -55,6 +56,7 @@ const RegisterPage = () => {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -72,6 +74,7 @@ const RegisterPage = () => {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -91,6 +94,7 @@ const RegisterPage = () => {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -109,15 +113,24 @@ const RegisterPage = () => {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
+
+            <Button type="submit" className="btn-primary w-full">
+            Sign In
+          </Button>
           </form>
 
-          <Button type="submit" className="btn-primary w-full">
-            Log In
-          </Button>
+          
         </Form>
+        <p className="text-body-sm">
+          Already Have an Account?
+          <a
+          className="hover:opacity-80" 
+           href="/login-page">  Log In</a>
+        </p>
       </ModalCard>
     </div>
   );
