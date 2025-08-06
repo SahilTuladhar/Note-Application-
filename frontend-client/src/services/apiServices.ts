@@ -13,7 +13,5 @@ export type RegisterPayload = {
     password: string
 }
 
-export type RegisterResponse = {
-
-}
+export type RegisterResponse = ApiResponse<number>
 
