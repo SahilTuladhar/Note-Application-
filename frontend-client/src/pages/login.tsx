@@ -3,16 +3,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../schemas/authSchema";
 import type { LoginFormInputs } from "../schemas/authSchema";
-import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 
@@ -34,10 +33,16 @@ const LoginPage = () => {
   return (
     <div className=" w-screen h-screen flex items-center justify-center font-sans">
       <ModalCard>
-        <h1 className="text-body-lg font-sans">Sign Up</h1>
+        <h1 className="text-body-lg font-sans">Log In</h1>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit, (errors) => {
+              const firstError = Object.values(errors)[0];
+
+              if (firstError?.message) {
+                toast.error(firstError.message.toString());
+              }
+            })}
             className=" flex flex-col justify-center !p-2 !w-full gap-5
             "
           >
@@ -55,7 +60,7 @@ const LoginPage = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  {/* <FormMessage /> */}
                 </FormItem>
               )}
             />
@@ -74,13 +79,13 @@ const LoginPage = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  {/* <FormMessage /> */}
                 </FormItem>
               )}
             />
 
             <Button type="submit" className="btn-primary w-full">
-              Log In
+              <a href="/home-page">Log In</a>
             </Button>
           </form>
         </Form>

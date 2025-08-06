@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../schemas/authSchema";
 import type { SignUpInputs } from "../schemas/authSchema";
-import { z } from "zod";
+import {toast} from "sonner"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -38,7 +38,16 @@ const RegisterPage = () => {
         <h1 className="text-body-lg font-sans">Sign Up</h1>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(
+              onSubmit , (errors) => {
+
+                const firstError = Object.values(errors)[0];
+
+                if(firstError?.message){
+                  toast.error(firstError.message.toString())
+                }
+
+            } )}
             className=" flex flex-col justify-center !p-2 !w-full gap-5
             "
           >
@@ -56,7 +65,7 @@ const RegisterPage = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    {/* <FormMessage /> */}
                   </FormItem>
                 )}
               />
@@ -74,7 +83,7 @@ const RegisterPage = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    {/* <FormMessage /> */}
                   </FormItem>
                 )}
               />
@@ -94,7 +103,7 @@ const RegisterPage = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  {/* <FormMessage /> */}
                 </FormItem>
               )}
             />
@@ -113,7 +122,7 @@ const RegisterPage = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  {/* <FormMessage /> */}
                 </FormItem>
               )}
             />
