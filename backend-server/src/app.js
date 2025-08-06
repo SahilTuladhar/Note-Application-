@@ -37,5 +37,12 @@ app.use(
     express.static('public')
 )
 
+// Route Imports
+
+import userRouter from './routes/users.route.js'
+
+
+app.use("/api/v1/users" , userRouter)
+
 
 export default app

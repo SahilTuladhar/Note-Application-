@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 import app from "./app.js";
-import connectDB from "./db/db.js";
 import mySqlPool from "./db/db.js";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
