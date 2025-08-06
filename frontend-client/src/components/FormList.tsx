@@ -7,7 +7,7 @@ const FormList = () => {
   return (
     <ModalCard className="!w-[900px] !min-h-[700px] !max-h-[700px] !justify-start">
       <div className="w-full flex flex-col !gap-6">
-        <div className="flex flex-row justify-between items-center +!pb-4 border-b-2 border-blue-200">
+        <div className="flex flex-row justify-between items-center !pb-4 border-b-2 border-blue-200">
           <p className="font-sans text-body-lg">Hi, Sahil</p>
            <Button 
            className="btn-primary !p-2"
