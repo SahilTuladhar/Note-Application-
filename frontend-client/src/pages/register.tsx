@@ -14,6 +14,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { useRegister } from "@/hooks/apiHooks";
 
 const RegisterPage = () => {
   const form = useForm<SignUpInputs>({
@@ -27,8 +28,18 @@ const RegisterPage = () => {
     },
   });
 
+  const {mutate} = useRegister();
+
   const onSubmit = (data: SignUpInputs) => {
     console.log("Register Data", data);
+     
+    mutate({
+      username: data.username,
+      email: data.email,
+      password:data.password
+    })
+
+
     form.reset()
   };
 

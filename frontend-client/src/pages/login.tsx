@@ -14,6 +14,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { useLogin } from "@/hooks/apiHooks";
 
 const LoginPage = () => {
   const form = useForm<LoginFormInputs>({
@@ -25,8 +26,17 @@ const LoginPage = () => {
     },
   });
 
+  const {mutate} = useLogin()
+
   const onSubmit = (data: LoginFormInputs) => {
     console.log("Login Data", data);
+    
+    mutate({
+      email: data.email,
+      password: data.password
+    })
+
+
     form.reset();
   };
 

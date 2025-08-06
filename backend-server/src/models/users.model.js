@@ -16,3 +16,4 @@ export const findUserByEmail = async(email) => {
    const [rows] = await mySqlPool.query(sql , [email])
    return rows[0] 
 }
+
