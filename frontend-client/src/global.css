@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Aboreto&display=swap');
+
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -105,7 +107,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif ;
   line-height: 1.6;
   color: var(--color-text-primary-light);
   background-color: var(--color-bg-primary-light);
@@ -117,6 +119,10 @@ body {
 /* ===== TYPOGRAPHY SYSTEM ===== */
 
 /* HEADING SIZES */
+
+.font-aboreto {
+  font-family: 'Aboreto', cursive;
+}
 
 .text-heading-lg {
   font-size: 3.5rem;     /* 56px */
