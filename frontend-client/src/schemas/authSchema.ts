@@ -27,3 +27,20 @@ export const signupSchema = loginSchema
   });
 
 export type SignUpInputs = z.infer<typeof signupSchema>;
+
+export const NoteFormSchema = z.object({
+  title: z
+  .string()
+  .min(1 , "Title is required"),
+
+  content: z
+  .string()
+  .min(1 , "Content is required")
+  .max(100 , "Content should not be more than 100 characters")
+  .optional(),
+
+  category:z
+  .enum(["Personal", "Work" , "Todo"])
+})
+
+export type NoteFormInputs = z.infer<typeof NoteFormSchema>

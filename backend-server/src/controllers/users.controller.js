@@ -96,6 +96,7 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
+    
   };
 
   return res
@@ -122,7 +123,7 @@ const refreshToken = asyncHandler(async (req, res) => {
 
   const decodedToken = verifyRefreshToken(token);
 
-  newAccessToken = generateAccessToken({
+  const newAccessToken = generateAccessToken({
     id: decodedToken.id,
     email: decodedToken.email,
   });
@@ -130,7 +131,7 @@ const refreshToken = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge: 60 * 60 * 1000,
   };
 
   res.cookie("accessToken", newAccessToken, options);
@@ -158,4 +159,31 @@ const logoutUser = asyncHandler(async (req, res) => {
   )
 });
 
-export { registerUser, loginUser, refreshToken , logoutUser};
+const getUserRecords = asyncHandler(async(req,res) => {
+
+  const userPayload = req.user
+
+  if(!userPayload){
+    throw new ApiError(401 , "Unauthorized Access")
+  }
+
+  const user = await findUserByEmail(userPayload.email)
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res
+  .status(200)
+  .json(
+    new ApiResponse(
+      200,
+      {username : user.username},
+      "User Records Retrieved Successfully"
+    )
+  )
+
+})
+
+export { registerUser, loginUser, refreshToken , logoutUser , getUserRecords};
+

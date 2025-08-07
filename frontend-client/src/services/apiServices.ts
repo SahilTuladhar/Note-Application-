@@ -25,10 +25,15 @@ export type LoginResponseType = {
     password:string
 }
 
+export type GetUserResponseType = {
+    username: string,
+}
+
 
 export type RegisterResponse = ApiResponse<number>
 export type LoginResponse = ApiResponse<LoginResponseType>
 export type LogoutResponse = ApiResponse<void>
+export type GetUserResponse = ApiResponse<GetUserResponseType>
 
 // functions that make call to API endpoints
 
@@ -66,4 +71,12 @@ export const logoutUserService = async() : Promise<LogoutResponse> => {
     return res.data
 
 }
+
+export const getUserRecordService = async():Promise<GetUserResponse> => {
+
+    const res = await api.get<GetUserResponse>("/users/home-page")
+
+    return res.data
+
+} 
 

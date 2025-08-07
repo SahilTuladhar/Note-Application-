@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { loginUserService, logoutUserService, registerUserService } from "@/services/apiServices";
+import { useMutation,useQuery ,useQueryClient } from "@tanstack/react-query";
+import { getUserRecordService, loginUserService, logoutUserService, registerUserService } from "@/services/apiServices";
 import { toast } from "sonner";
 import type { RegisterPayload, RegisterResponse } from "@/services/apiServices";
 import { useNavigate } from "react-router-dom";
@@ -67,4 +67,13 @@ export const useLogout = () => {
 
   })
 
+}
+
+export const useGetRecords = () => {
+
+   return useQuery({
+    queryKey: ["records"],
+    queryFn: getUserRecordService,
+
+   })
 }

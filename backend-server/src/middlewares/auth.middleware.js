@@ -1,10 +1,10 @@
 // Middleware that is used to check validity of access token 
 
 
-import { ApiError } from "next/dist/server/api-utils";
-import asyncHandler from "../utils/asyncHandler";
-import { verifyAccessToken } from "../utils/tokenHandler";
-import { findUserByEmail } from "../models/users.model";
+import ApiError from "../utils/ApiErrors.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import { verifyAccessToken } from "../utils/tokenHandler.js";
+import { findUserByEmail } from "../models/users.model.js";
 
 const verifyJWT = asyncHandler( async(req , res , next) => {
 
@@ -16,8 +16,10 @@ const verifyJWT = asyncHandler( async(req , res , next) => {
 
     const decodedToken = verifyAccessToken(token);
 
-    req.user = decodedToken; 
+    req.user = decodedToken;     
 
     next()
 
 })
+
+export default verifyJWT
