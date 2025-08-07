@@ -1,9 +1,19 @@
+import { useLogout } from "@/hooks/apiHooks";
 import FormCard from "./FormCard";
 import ModalCard from "./modalCard";
 import { Button } from "@/components/ui/button";
 
 
 const FormList = () => {
+
+  const {mutate} = useLogout()
+  
+  const onUserLogout = () => {
+
+    mutate()
+
+  } 
+
   return (
     <ModalCard className="!w-[900px] !min-h-[700px] !max-h-[700px] !justify-start">
       <div className="w-full flex flex-col !gap-6">
@@ -11,6 +21,7 @@ const FormList = () => {
           <p className="font-sans text-body-lg">Hi, Sahil</p>
            <Button 
            className="btn-primary !p-2"
+           onClick={onUserLogout}
            >
             Log Out
            </Button>

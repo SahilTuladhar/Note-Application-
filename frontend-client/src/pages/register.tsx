@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../schemas/authSchema";
 import type { SignUpInputs } from "../schemas/authSchema";
-import {toast} from "sonner"
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -28,37 +28,37 @@ const RegisterPage = () => {
     },
   });
 
-  const {mutate} = useRegister();
+  const { mutate } = useRegister();
 
   const onSubmit = (data: SignUpInputs) => {
     console.log("Register Data", data);
-     
+
     mutate({
       username: data.username,
       email: data.email,
-      password:data.password
-    })
+      password: data.password,
+    });
 
-
-    form.reset()
+    form.reset();
   };
 
   return (
     <div className=" w-screen h-screen flex items-center justify-center font-sans">
       <ModalCard>
+        <p className="text-heading-sm !font-normal">
+          <span className="text-green-600 font-bold">Leap</span>Notes
+        </p>
+
         <h1 className="text-body-lg font-sans">Sign Up</h1>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(
-              onSubmit , (errors) => {
+            onSubmit={form.handleSubmit(onSubmit, (errors) => {
+              const firstError = Object.values(errors)[0];
 
-                const firstError = Object.values(errors)[0];
-
-                if(firstError?.message){
-                  toast.error(firstError.message.toString())
-                }
-
-            } )}
+              if (firstError?.message) {
+                toast.error(firstError.message.toString());
+              }
+            })}
             className=" flex flex-col justify-center !p-2 !w-full gap-5
             "
           >
@@ -139,17 +139,16 @@ const RegisterPage = () => {
             />
 
             <Button type="submit" className="btn-primary w-full">
-            Sign In
-          </Button>
+              Sign In
+            </Button>
           </form>
-
-          
         </Form>
         <p className="text-body-sm">
           Already Have an Account?
-          <a
-          className="hover:opacity-80" 
-           href="/login-page">  Log In</a>
+          <a className="hover:opacity-80" href="/login-page">
+            {" "}
+            Log In
+          </a>
         </p>
       </ModalCard>
     </div>

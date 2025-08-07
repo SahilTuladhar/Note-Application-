@@ -26,13 +26,13 @@ export type LoginResponseType = {
 }
 
 
-
 export type RegisterResponse = ApiResponse<number>
 export type LoginResponse = ApiResponse<LoginResponseType>
+export type LogoutResponse = ApiResponse<void>
 
 // functions that make call to API endpoints
 
-export const registerUser = async(data : RegisterPayload) : Promise<RegisterResponse>=> {
+export const registerUserService = async(data : RegisterPayload) : Promise<RegisterResponse>=> {
 
     const res = await api.post<RegisterResponse>("/users/register" , data)
 
@@ -44,7 +44,7 @@ export const registerUser = async(data : RegisterPayload) : Promise<RegisterResp
 
 }
 
-export const loginUser = async(data : LoginPayload ) : Promise<LoginResponse> => {
+export const loginUserService = async(data : LoginPayload ) : Promise<LoginResponse> => {
   
      const res = await api.post<LoginResponse>("/users/login-user" , data)
 
@@ -53,5 +53,17 @@ export const loginUser = async(data : LoginPayload ) : Promise<LoginResponse> =>
      }
 
      return res.data
+}
+
+export const logoutUserService = async() : Promise<LogoutResponse> => {
+
+    const res = await api.post<LogoutResponse>("/users/logout-user")
+
+    if(res.status !== 200){
+        throw new Error("Failed To Log Out")
+    }
+
+    return res.data
+
 }
 

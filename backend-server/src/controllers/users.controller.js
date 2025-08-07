@@ -77,35 +77,85 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   // creating access and refresh tokens
-  
+
   const tokenPayload = {
-    sub: user.id,
-    email: user.email
-  }
+    id: user.id,
+    email: user.email,
+  };
 
-  const accessToken = generateAccessToken(tokenPayload)
-  const refreshToken = generateRefreshToken(tokenPayload)
+  const accessToken = generateAccessToken(tokenPayload);
+  const refreshToken = generateRefreshToken(tokenPayload);
 
-  
-  const options = {
-      httpOnly : true,
-      secure: true
-   }
+  const accessOptions = {
+    httpOnly: true,
+    secure: true,
+    max: 60 * 60 * 1000, // 1h
+  };
 
-   return res
-   .status(200)
-   .cookie("accessToken" , accessToken , options)
-   .cookie("refreshToken" , refreshToken , options)
-   .json(
-    new ApiResponse(
-      200,
-      {
-        user
-      },
-      "User Logged in Successfully"
-    )
-   )
+  const refreshOptions = {
+    httpOnly: true,
+    secure: true,
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
+  };
 
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, accessOptions)
+    .cookie("refreshToken", refreshToken, refreshOptions)
+    .json(
+      new ApiResponse(
+        200,
+        {
+          user,
+        },
+        "User Logged in Successfully"
+      )
+    );
 });
 
-export { registerUser, loginUser };
+const refreshToken = asyncHandler(async (req, res) => {
+  const token = req.cookies.refreshToken;
+
+  if (!token) {
+    throw new ApiError(401, "Refresh Token Expired");
+  }
+
+  const decodedToken = verifyRefreshToken(token);
+
+  newAccessToken = generateAccessToken({
+    id: decodedToken.id,
+    email: decodedToken.email,
+  });
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  };
+
+  res.cookie("accessToken", newAccessToken, options);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Access Token Refreshed Successfully"));
+});
+
+const logoutUser = asyncHandler(async (req, res) => {
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: true,
+  });
+
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: true,
+  });
+
+  return res
+  .status(200)
+  .json(
+    new ApiResponse(200 , null , "Logged Out Successfully")
+  )
+});
+
+export { registerUser, loginUser, refreshToken , logoutUser};

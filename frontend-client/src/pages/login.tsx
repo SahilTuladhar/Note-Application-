@@ -43,6 +43,7 @@ const LoginPage = () => {
   return (
     <div className=" w-screen h-screen flex items-center justify-center font-sans">
       <ModalCard>
+        <p className="text-heading-sm !font-normal"><span className="text-green-600 font-bold">Leap</span>Notes</p>
         <h1 className="text-body-lg font-sans">Log In</h1>
         <Form {...form}>
           <form

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { loginUser, registerUser } from "@/services/apiServices";
+import { loginUserService, logoutUserService, registerUserService } from "@/services/apiServices";
 import { toast } from "sonner";
 import type { RegisterPayload, RegisterResponse } from "@/services/apiServices";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ export const useRegister = () => {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: registerUser,
+    mutationFn: registerUserService,
 
     onSuccess: (data) => {
       toast.success("Account Sucessfully Created");
@@ -20,7 +20,7 @@ export const useRegister = () => {
     },
 
     onError: (error: Error) => {
-      toast.error("Failed to Create Account");
+      toast.error(error.message);
       console.log("ERR", error);
     },
   });
@@ -30,7 +30,7 @@ export const useLogin = () => {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: loginUser,
+    mutationFn: loginUserService,
 
     onSuccess: (data) => {
       toast.success("Logged in Successfully");
@@ -40,8 +40,31 @@ export const useLogin = () => {
     },
 
     onError: (error: Error) => {
-      toast.error("Login Failed");
+      toast.error(error.message);
       console.log("ERR", error);
     },
   });
 };
+
+
+export const useLogout = () => {
+   
+  const navigate = useNavigate()
+
+  return useMutation({
+   
+    mutationFn: logoutUserService,
+
+    onSuccess: () => {
+      toast.success("Logged out Successfully");
+
+      navigate("/login-page");
+    },
+
+    onError: (error : Error) => {
+      toast.error(error.message)
+    }
+
+  })
+
+}
