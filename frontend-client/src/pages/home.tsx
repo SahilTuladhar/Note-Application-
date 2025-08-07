@@ -6,9 +6,9 @@ import FormList from "@/components/FormList";
 
 const HomePage = () => {
   return (
-    <div className="border border-green-500 h-screen w-screen flex">
+    <div className="border border-green-500 h-screen w-screen flex flex-row justify-center items-center gap-20">
       <div
-        className="w-[70%] flex justify-center items-center
+        className=" flex justify-center items-center
           font-sans"
       >
         <ModalCard className="!relative !h-[750px] !w-80">
@@ -40,7 +40,7 @@ const HomePage = () => {
       </div>
 
       <div
-        className="border border-blue-500 w-full font-sans flex items-center justify-center
+        className="font-sans flex items-center justify-center
         "
       >
         <FormList />

@@ -2,33 +2,42 @@ import { useLogout } from "@/hooks/apiHooks";
 import FormCard from "./FormCard";
 import ModalCard from "./modalCard";
 import { Button } from "@/components/ui/button";
-
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 const FormList = () => {
+  const { mutate } = useLogout();
 
-  const {mutate} = useLogout()
-  
   const onUserLogout = () => {
-
-    mutate()
-
-  } 
+    mutate();
+  };
 
   return (
-    <ModalCard className="!w-[900px] !min-h-[700px] !max-h-[700px] !justify-start">
-      <div className="w-full flex flex-col !gap-6">
-        <div className="flex flex-row justify-between items-center !pb-4 border-b-2 border-blue-200">
-          <p className="font-sans text-body-lg">Hi, Sahil</p>
-           <Button 
-           className="btn-primary !p-2"
-           onClick={onUserLogout}
-           >
+    <ModalCard className="relative !w-[900px] !h-[700px] !min-h-[700px] !max-h-[700px] !justify-start">
+      <div className="w-full !h-full flex flex-col !gap-6 ">
+        <div className="flex flex-row justify-between items-center !pb-1 ">
+          <p className="font-sans text-heading-xs !font-normal">
+            Welcome back, Sahil
+          </p>
+          <Button className="btn-primary !p-2" onClick={onUserLogout}>
             Log Out
-           </Button>
+          </Button>
         </div>
-        <div>
-          <FormCard />
+
+        <p className="text-heading-xs !font-normal">Notes</p>
+
+        <div className="flex flex-col gap-10">
+          <FormCard is_completed={true} />
+
+          <FormCard is_completed={false} />
         </div>
+
+        <Button
+        className="absolute top-[95%] left-[45.5%] btn-primary !bg-accent-green w-16 h-16 !p-3 rounded-full"
+        >
+
+          <AddRoundedIcon />
+          
+        </Button>
       </div>
     </ModalCard>
   );
