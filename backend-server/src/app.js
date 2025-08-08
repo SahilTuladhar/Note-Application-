@@ -42,9 +42,11 @@ app.use(
 // Route Imports
 
 import userRouter from './routes/users.route.js'
+import noteRouter from './routes/notes.route.js'
 
 
 app.use("/api/v1/users" , userRouter)
+app.use("/api/v1/notes" , noteRouter)
 
 
 export default app

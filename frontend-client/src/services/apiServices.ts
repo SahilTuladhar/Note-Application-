@@ -18,6 +18,12 @@ export type LoginPayload = {
     password: string
 }
 
+export type NotePayload = {
+    title: string,
+    content: string,
+    category: "Personal" | "Todo" | "Work"
+}
+
 export type LoginResponseType = {
     user_id: number,
     username: string,
@@ -34,6 +40,7 @@ export type RegisterResponse = ApiResponse<number>
 export type LoginResponse = ApiResponse<LoginResponseType>
 export type LogoutResponse = ApiResponse<void>
 export type GetUserResponse = ApiResponse<GetUserResponseType>
+export type CreateNoteResponse = ApiResponse<number>
 
 // functions that make call to API endpoints
 
@@ -79,4 +86,16 @@ export const getUserRecordService = async():Promise<GetUserResponse> => {
     return res.data
 
 } 
+
+export const createNoteService = async(data : NotePayload ):Promise<CreateNoteResponse> => {
+
+    const res = await api.post<CreateNoteResponse>("/notes/create-note" , data)
+
+    if(res.status !== 200 && res.status !== 201){
+        throw new Error("Failed to Create Note")
+    }
+
+    return res.data
+
+}
 

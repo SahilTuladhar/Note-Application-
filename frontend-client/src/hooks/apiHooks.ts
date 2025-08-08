@@ -1,5 +1,5 @@
 import { useMutation,useQuery ,useQueryClient } from "@tanstack/react-query";
-import { getUserRecordService, loginUserService, logoutUserService, registerUserService } from "@/services/apiServices";
+import { createNoteService, getUserRecordService, loginUserService, logoutUserService, registerUserService } from "@/services/apiServices";
 import { toast } from "sonner";
 import type { RegisterPayload, RegisterResponse } from "@/services/apiServices";
 import { useNavigate } from "react-router-dom";
@@ -76,4 +76,22 @@ export const useGetRecords = () => {
     queryFn: getUserRecordService,
 
    })
+}
+
+export const useCreateNote = () => {
+
+  return useMutation({
+    mutationFn: createNoteService,
+
+    onSuccess: (data) => {
+      toast.success("Note created Successfully");
+      console.log(data);
+      
+    },
+
+    onError: (err) => {
+      toast.error(err.message)
+    }
+  })
+
 }

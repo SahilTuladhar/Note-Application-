@@ -9,4 +9,5 @@ userRouter.post("/login-user" , loginUser)
 userRouter.post("/logout-user" , logoutUser)
 userRouter.get("/home-page" , verifyJWT , getUserRecords )
 
+
 export default userRouter

@@ -22,13 +22,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
+import {
+  Select as ShadcnSelect,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useCreateNote } from "@/hooks/apiHooks";
 
 const NoteForm = () => {
-  const [value, setValue] = useState<string>("Personal");
+  // const [value, setValue] = useState<string>("Personal");
+
+  const {mutate} = useCreateNote()
 
   const form = useForm<NoteFormInputs>({
     resolver: zodResolver(NoteFormSchema),
@@ -36,12 +42,18 @@ const NoteForm = () => {
     defaultValues: {
       title: "",
       content: "",
-      category: "Personal",
+      category: undefined,
     },
   });
 
   const onSubmit = (noteData: NoteFormInputs) => {
     console.log("FORM SUBMIT", noteData);
+
+    mutate({
+      title: noteData.title,
+      content: noteData.content ?? "",
+      category: noteData.category,
+    })
 
     form.reset();
   };
@@ -81,22 +93,33 @@ const NoteForm = () => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="category"
             render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <Select
+              <FormItem>
+                <FormControl
+                className="!w-full">
+                  <ShadcnSelect
                     value={field.value}
-                    label="category"
-                    onChange={(e) => field.onChange(e.target.value)}
+                    onValueChange={field.onChange} 
                   >
-                    <MenuItem value="Personal">Personal</MenuItem>
-                    <MenuItem value="Work">Work</MenuItem>
-                    <MenuItem value="Todo">Todo</MenuItem>
-                  </Select>
+                    <SelectTrigger
+                    className="w-full">
+                      <SelectValue 
+
+                      placeholder="Select a Category" />
+                    </SelectTrigger>
+                    <SelectContent
+                    className="border border-green-500 !w-full">
+                      <SelectItem className = "!p-2" value="Personal">Personal</SelectItem>
+                      <SelectItem className = "!p-2" value="Work">Work</SelectItem>
+                      <SelectItem className = "!p-2" value="Todo">Todo</SelectItem>
+                    </SelectContent>
+                  </ShadcnSelect>
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -111,7 +134,6 @@ const NoteForm = () => {
                     variant="outlined"
                     multiline
                     rows={6}
-                    maxRows={10}
                     fullWidth
                     label="Description"
                     {...field}
