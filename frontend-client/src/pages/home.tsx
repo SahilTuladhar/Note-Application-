@@ -9,14 +9,7 @@ import { useEffect } from "react";
 const HomePage = () => {
 
 
-  const {data , isLoading , isError, isSuccess , error} = useGetRecords()
-
-  useEffect(() => {
-
-    if(isError && error){
-      toast.error(error.message)
-    }
-  } , [isError , error])
+  
   
   return (
     <div className="border border-green-500 h-screen w-screen flex flex-row justify-center items-center gap-20">
@@ -56,11 +49,7 @@ const HomePage = () => {
         className="font-sans flex items-center justify-center
         "
       >
-        {
-          !isLoading
-          ? <FormList userData={data?.data} /> 
-          : <p>Fetching Data...</p>
-        }
+        <FormList />
       </div>
 
 

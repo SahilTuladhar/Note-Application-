@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { createUser, findUserByEmail } from "../models/users.model.js";
+import { createUser, findUserByEmail, getNotesByUserId } from "../models/users.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiErrors.js";
 import ApiResponse from "../utils/ApiResponse.js";
@@ -169,6 +169,8 @@ const getUserRecords = asyncHandler(async(req,res) => {
 
   const user = await findUserByEmail(userPayload.email)
 
+  const userNotes = await getNotesByUserId(user.user_id)
+
   if (!user) {
     throw new ApiError(404, "User not found");
   }
@@ -178,7 +180,9 @@ const getUserRecords = asyncHandler(async(req,res) => {
   .json(
     new ApiResponse(
       200,
-      {username : user.username},
+      {username : user.username,
+        notes : userNotes
+      },
       "User Records Retrieved Successfully"
     )
   )

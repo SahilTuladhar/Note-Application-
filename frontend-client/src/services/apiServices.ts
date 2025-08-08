@@ -31,9 +31,23 @@ export type LoginResponseType = {
     password:string
 }
 
+export type NoteResponseType = {
+    note_id: number,
+    user_id: number,
+    title: string,
+    content: string,
+    category: "Personal" | "Work" | "Todo",
+    created_at: string,
+    updated_at?: string,
+    is_completed: number
+}
+
 export type GetUserResponseType = {
     username: string,
+    notes: NoteResponseType[]
 }
+
+
 
 
 export type RegisterResponse = ApiResponse<number>

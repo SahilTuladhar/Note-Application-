@@ -17,6 +17,13 @@ export const findUserByEmail = async(email) => {
    return rows[0] 
 }
 
+export const getNotesByUserId = async(id) => {
+
+    const sql = "SELECT * FROM notes WHERE user_id = ?"
+    const[rows] = await mySqlPool.query(sql , [id])
+    return rows
+} 
+
 
 
 

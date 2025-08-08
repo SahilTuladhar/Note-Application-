@@ -23,7 +23,7 @@ export const createNote = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User not found");
   }
   
-  const noteID = await createNoteQuery(title , content , category , user.id)
+  const noteID = await createNoteQuery(title , content , category , user.user_id)
 
   return res
   .status(201)

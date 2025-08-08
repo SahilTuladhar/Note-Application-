@@ -1,4 +1,4 @@
-import { useLogout } from "@/hooks/apiHooks";
+import { useGetRecords, useLogout } from "@/hooks/apiHooks";
 import FormCard from "./FormCard";
 import ModalCard from "./modalCard";
 import { Button } from "@/components/ui/button";
@@ -17,37 +17,79 @@ import {
 } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import NoteForm from "./NoteForm";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { data } from "react-router-dom";
 
-type FormListProps = {
-  userData?: GetUserResponseType;
-};
+// type FormListProps = {
+//   userData: GetUserResponseType;
+// };
 
-const FormList = ({ userData }: FormListProps) => {
+const FormList = () => {
   const { mutate } = useLogout();
 
   const onUserLogout = () => {
     mutate();
   };
 
+  const { data, isLoading, isError, isSuccess, error } = useGetRecords();
+
+
+
+  useEffect(() => {
+    if (isError && error) {
+      toast.error(error.message);
+    }
+  }, [isError, error]);
+
+  const notesCount = data?.data.notes.length ?? 0
+
   return (
     <ModalCard className="relative !w-[900px] !h-[700px] !min-h-[700px] !max-h-[700px] !justify-start">
-      <div className="w-full !h-full flex flex-col !gap-6 ">
+      <div className="w-full !h-full flex flex-col !gap-3 ">
         <div className="flex flex-row justify-between items-center !pb-1 ">
           <p className="font-sans text-heading-xs !font-normal">
-            Welcome back, {userData?.username}
+            Welcome back, {data?.data.username}
           </p>
           <Button className="btn-primary !p-2" onClick={onUserLogout}>
             Log Out
           </Button>
         </div>
 
-        <p className="text-heading-xs !font-normal">Notes</p>
+        <p className="text-heading-xs !font-normal border-b-2 border-blue-300 !pb-3">
+          Notes
+        </p>
 
-        <div className="flex flex-col gap-10">
-          <FormCard is_completed={true} />
+        {
+          isLoading && (
+            <div>
+              Featching Your Data...
+            </div>
+          )
+        }
 
-          <FormCard is_completed={false} />
-        </div>
+        
+        {(notesCount > 0 && !isLoading) ? (
+          <div className="flex flex-col gap-10">
+            <ul>
+              {data?.data.notes.map((note) => {
+                return (
+                  <FormCard
+                    is_completed={note.is_completed === 0 ? false : true}
+                    title={note.title}
+                    content={note.content}
+                    category={note.category}
+                    createdAt={note.created_at}
+                  />
+                );
+              })}
+            </ul>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center">
+            Create a note to get started.
+          </div>
+        )}
 
         {/* Creating Dialog for Note Form */}
 

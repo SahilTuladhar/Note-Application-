@@ -80,12 +80,16 @@ export const useGetRecords = () => {
 
 export const useCreateNote = () => {
 
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: createNoteService,
 
     onSuccess: (data) => {
       toast.success("Note created Successfully");
       console.log(data);
+
+      queryClient.invalidateQueries({ queryKey: ["records"] })
       
     },
 
