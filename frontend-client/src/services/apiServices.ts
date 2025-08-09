@@ -1,115 +1,158 @@
 import api from "@/lib/api";
 
 type ApiResponse<T> = {
-    statusCode: number,
-    data: T,
-    message: string,
-    success: boolean
-}
+  statusCode: number;
+  data: T;
+  message: string;
+  success: boolean;
+};
 
 export type RegisterPayload = {
-    username: string,
-    email: string,
-    password: string
-}
+  username: string;
+  email: string;
+  password: string;
+};
 
 export type LoginPayload = {
-    email: string,
-    password: string
-}
+  email: string;
+  password: string;
+};
 
 export type NotePayload = {
-    title: string,
-    content: string,
-    category: "Personal" | "Todo" | "Work"
+  title: string;
+  content: string;
+  category: "Personal" | "Todo" | "Work";
+};
+
+export type CompleteNotePayload = {
+  note_id: number;
+};
+
+export type IncompleteNotePayload ={
+  note_id: number;
 }
 
 export type LoginResponseType = {
-    user_id: number,
-    username: string,
-    email:string,
-    password:string
-}
+  user_id: number;
+  username: string;
+  email: string;
+  password: string;
+};
 
 export type NoteResponseType = {
-    note_id: number,
-    user_id: number,
-    title: string,
-    content: string,
-    category: "Personal" | "Work" | "Todo",
-    created_at: string,
-    updated_at?: string,
-    is_completed: number
-}
+  note_id: number;
+  user_id: number;
+  title: string;
+  content: string;
+  category: "Personal" | "Work" | "Todo";
+  created_at: string;
+  updated_at?: string;
+  is_completed: number;
+};
 
 export type GetUserResponseType = {
-    username: string,
-    notes: NoteResponseType[]
-}
+  username: string;
+  notes: NoteResponseType[];
+};
 
+export type CompeleteNoteResponseType = {
+  notes_affected: number;
+  note_id: number;
+};
 
+export type IncompeleteNoteResponseType = {
+  notes_affected: number;
+  note_id: number;
+};
 
-
-export type RegisterResponse = ApiResponse<number>
-export type LoginResponse = ApiResponse<LoginResponseType>
-export type LogoutResponse = ApiResponse<void>
-export type GetUserResponse = ApiResponse<GetUserResponseType>
-export type CreateNoteResponse = ApiResponse<number>
+export type RegisterResponse = ApiResponse<number>;
+export type LoginResponse = ApiResponse<LoginResponseType>;
+export type LogoutResponse = ApiResponse<void>;
+export type GetUserResponse = ApiResponse<GetUserResponseType>;
+export type CreateNoteResponse = ApiResponse<number>;
+export type CompleteNoteResponse = ApiResponse<CompeleteNoteResponseType>;
+export type IncompleteNoteResponse = ApiResponse<IncompeleteNoteResponseType>
 
 // functions that make call to API endpoints
 
-export const registerUserService = async(data : RegisterPayload) : Promise<RegisterResponse>=> {
+export const registerUserService = async (
+  data: RegisterPayload
+): Promise<RegisterResponse> => {
+  const res = await api.post<RegisterResponse>("/users/register", data);
 
-    const res = await api.post<RegisterResponse>("/users/register" , data)
+  if (res.status !== 200 && res.status !== 201) {
+    throw new Error("Failed Sign In Attempt");
+  }
 
-    if(res.status !== 200 && res.status !== 201){
-        throw new Error("Failed Sign In Attempt")
-    }
+  return res.data;
+};
+
+export const loginUserService = async (
+  data: LoginPayload
+): Promise<LoginResponse> => {
+  const res = await api.post<LoginResponse>("/users/login-user", data);
+
+  if (res.status !== 200) {
+    throw new Error("Failed Log in attempt");
+  }
+
+  return res.data;
+};
+
+export const logoutUserService = async (): Promise<LogoutResponse> => {
+  const res = await api.post<LogoutResponse>("/users/logout-user");
+
+  if (res.status !== 200) {
+    throw new Error("Failed To Log Out");
+  }
+
+  return res.data;
+};
+
+export const getUserRecordService = async (): Promise<GetUserResponse> => {
+  const res = await api.get<GetUserResponse>("/users/home-page");
+
+  return res.data;
+};
+
+export const createNoteService = async (
+  data: NotePayload
+): Promise<CreateNoteResponse> => {
+  const res = await api.post<CreateNoteResponse>("/notes/create-note", data);
+
+  if (res.status !== 200 && res.status !== 201) {
+    throw new Error("Failed to Create Note");
+  }
+
+  return res.data;
+};
+
+export const completeNoteService = async (
+  data: CompleteNotePayload
+): Promise<CompleteNoteResponse> => {
+  try {
+    const res = await api.patch<CompleteNoteResponse>(
+      "/notes/complete-note",
+      data
+    );
+
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+
+export const incompleteNoteService = async(data : IncompleteNotePayload ) :Promise<IncompleteNoteResponse> => {
+
+  try{
+
+    const res = await api.patch<IncompleteNoteResponse>("/notes/incomplete-note",data);
 
     return res.data
-
-}
-
-export const loginUserService = async(data : LoginPayload ) : Promise<LoginResponse> => {
-  
-     const res = await api.post<LoginResponse>("/users/login-user" , data)
-
-     if(res.status !== 200){
-        throw new Error("Failed Log in attempt")
-     }
-
-     return res.data
-}
-
-export const logoutUserService = async() : Promise<LogoutResponse> => {
-
-    const res = await api.post<LogoutResponse>("/users/logout-user")
-
-    if(res.status !== 200){
-        throw new Error("Failed To Log Out")
-    }
-
-    return res.data
-
-}
-
-export const getUserRecordService = async():Promise<GetUserResponse> => {
-
-    const res = await api.get<GetUserResponse>("/users/home-page")
-
-    return res.data
-
+    
+  }catch(error : any){
+   throw new Error(error.message)
+  }
 } 
-
-export const createNoteService = async(data : NotePayload ):Promise<CreateNoteResponse> => {
-
-    const res = await api.post<CreateNoteResponse>("/notes/create-note" , data)
-
-    if(res.status !== 200 && res.status !== 201){
-        throw new Error("Failed to Create Note")
-    }
-
-    return res.data
-
-}
 

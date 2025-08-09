@@ -80,6 +80,7 @@ const FormList = () => {
                     content={note.content}
                     category={note.category}
                     createdAt={note.created_at}
+                    note_id={note.note_id}
                   />
                 );
               })}

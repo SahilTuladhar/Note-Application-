@@ -1,12 +1,27 @@
+import { useCompleteNote, useIncompletNote } from "@/hooks/apiHooks";
+
 type FormCardProps = {
   is_completed: boolean,
   title : string,
   content : string,
   category : "Personal" | "Work" | "Todo",
-  createdAt: string
+  createdAt: string,
+  note_id: number
 }
 
-const FormCard = ({is_completed , title , content , category , createdAt} : FormCardProps) => {
+const FormCard = ({is_completed , title , content , category , createdAt , note_id} : FormCardProps) => {
+  
+  const {mutate : completeMutate} = useCompleteNote()
+  const {mutate: incompleteMutate} = useIncompletNote()
+
+  const onCompleteHandler = (note_id: number , is_completed: boolean) => {
+    if(!is_completed){
+      completeMutate({note_id})
+    }else{
+      incompleteMutate({note_id})
+    }
+  }
+  
   return (
     <div className="flex flex-col !py-4 border-b-3 border-blue-200 gap-2">
       <div className=" w-full !pb-1 flex flex-row justify-between items-center">
@@ -19,6 +34,7 @@ const FormCard = ({is_completed , title , content , category , createdAt} : Form
              }
           `}> {category}</p>
         <div 
+        onClick={() => onCompleteHandler(note_id , is_completed)}
         className={`border-2  w-10 h-10 rounded-md
           ${is_completed ? "border-green-700 bg-accent-green" : "border-gray-500 bg-gray-50"}`
           }/>

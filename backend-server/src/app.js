@@ -14,7 +14,7 @@ app.use(
         origin: process.env.CORS_ORIGIN || "http://localhost:5173" ,
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization'], 
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' , "PATCH"]
     })
 )
 
@@ -39,10 +39,26 @@ app.use(
     express.static('public')
 )
 
+app.use((err , req, res, next) => {
+    console.error(err);
+
+    if(err instanceof ApiError){
+        return res
+        .status(err.statusCode)
+        .json({
+            message:err.message
+        })
+    }
+
+    res.status(500).json({ message: 'Internal Server Error' });
+    
+})
+
 // Route Imports
 
 import userRouter from './routes/users.route.js'
 import noteRouter from './routes/notes.route.js'
+import ApiError from './utils/ApiErrors.js'
 
 
 app.use("/api/v1/users" , userRouter)
