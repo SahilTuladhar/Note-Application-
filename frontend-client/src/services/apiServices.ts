@@ -28,9 +28,13 @@ export type CompleteNotePayload = {
   note_id: number;
 };
 
-export type IncompleteNotePayload ={
+export type IncompleteNotePayload = {
   note_id: number;
-}
+};
+
+export type DeleteNotePayload = {
+  note_id: number;
+};
 
 export type LoginResponseType = {
   user_id: number;
@@ -65,13 +69,19 @@ export type IncompeleteNoteResponseType = {
   note_id: number;
 };
 
+export type DeleteNoteResponseType = {
+  notes_affected: number;
+  note_id: number;
+};
+
 export type RegisterResponse = ApiResponse<number>;
 export type LoginResponse = ApiResponse<LoginResponseType>;
 export type LogoutResponse = ApiResponse<void>;
 export type GetUserResponse = ApiResponse<GetUserResponseType>;
 export type CreateNoteResponse = ApiResponse<number>;
 export type CompleteNoteResponse = ApiResponse<CompeleteNoteResponseType>;
-export type IncompleteNoteResponse = ApiResponse<IncompeleteNoteResponseType>
+export type IncompleteNoteResponse = ApiResponse<IncompeleteNoteResponseType>;
+export type DeleteNoteResponse = ApiResponse<DeleteNoteResponseType>
 
 // functions that make call to API endpoints
 
@@ -142,17 +152,28 @@ export const completeNoteService = async (
   }
 };
 
+export const incompleteNoteService = async (
+  data: IncompleteNotePayload
+): Promise<IncompleteNoteResponse> => {
+  try {
+    const res = await api.patch<IncompleteNoteResponse>(
+      "/notes/incomplete-note",
+      data
+    );
 
-export const incompleteNoteService = async(data : IncompleteNotePayload ) :Promise<IncompleteNoteResponse> => {
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
 
+export const deleteNoteService = async(data : DeleteNotePayload): Promise<DeleteNoteResponse> => {
   try{
 
-    const res = await api.patch<IncompleteNoteResponse>("/notes/incomplete-note",data);
-
+    const res = await api.delete('/notes/delete-note' , {data})
     return res.data
-    
-  }catch(error : any){
-   throw new Error(error.message)
-  }
-} 
 
+  }catch(error : any){
+    throw new Error(error.message)
+  }
+} ;

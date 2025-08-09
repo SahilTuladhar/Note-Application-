@@ -150,6 +150,14 @@ body {
 
 /* BODY SIZES */
 
+
+.text-body-xl{
+  font-size: 1.4rem;   /* 18px */
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+
 .text-body-lg{
   font-size: 1.125rem;   /* 18px */
   font-weight: 400;
@@ -164,6 +172,12 @@ body {
 
 .text-body-sm{
   font-size: 0.875rem;   /* 14px */
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-body-xs{
+  font-size: 0.675rem;   /* 14px */
   font-weight: 400;
   line-height: 1.5;
 }

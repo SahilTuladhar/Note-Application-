@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   completeNoteService,
   createNoteService,
+  deleteNoteService,
   getUserRecordService,
   incompleteNoteService,
   loginUserService,
@@ -180,3 +181,25 @@ export const useIncompletNote = () => {
     
   });
 };
+
+export const useDeleteNote = () => {
+
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteNoteService,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey : ["records"]})
+      toast.success("Note successfully deleted");
+      
+    },
+
+    onError: (err) => {
+      toast.error(err.message)
+    }
+  })
+ 
+
+  
+}

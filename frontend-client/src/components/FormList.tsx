@@ -34,15 +34,13 @@ const FormList = () => {
 
   const { data, isLoading, isError, isSuccess, error } = useGetRecords();
 
-
-
   useEffect(() => {
     if (isError && error) {
       toast.error(error.message);
     }
   }, [isError, error]);
 
-  const notesCount = data?.data.notes.length ?? 0
+  const notesCount = data?.data.notes.length ?? 0;
 
   return (
     <ModalCard className="relative !w-[900px] !h-[700px] !min-h-[700px] !max-h-[700px] !justify-start">
@@ -60,31 +58,21 @@ const FormList = () => {
           Notes
         </p>
 
-        {
-          isLoading && (
-            <div>
-              Featching Your Data...
-            </div>
-          )
-        }
+        {isLoading && <div>Featching Your Data...</div>}
 
-        
-        {(notesCount > 0 && !isLoading) ? (
-          <div className="flex flex-col gap-10">
-            <ul>
-              {data?.data.notes.map((note) => {
-                return (
-                  <FormCard
-                    is_completed={note.is_completed === 0 ? false : true}
-                    title={note.title}
-                    content={note.content}
-                    category={note.category}
-                    createdAt={note.created_at}
-                    note_id={note.note_id}
-                  />
-                );
-              })}
-            </ul>
+        {notesCount > 0 && !isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 overflow-y-auto ">
+            {data?.data.notes.map((note) => (
+              <FormCard
+                key={note.note_id}
+                is_completed={note.is_completed === 0 ? false : true}
+                title={note.title}
+                content={note.content}
+                category={note.category}
+                createdAt={note.created_at}
+                note_id={note.note_id}
+              />
+            ))}
           </div>
         ) : (
           <div className="flex items-center justify-center">

@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiErrors.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { completeNoteQuery, createNoteQuery, incompleteNoteQuery } from "../models/notes.model.js";
+import { completeNoteQuery, createNoteQuery, deleteNoteQuery, incompleteNoteQuery } from "../models/notes.model.js";
 import { findUserByEmail } from "../models/users.model.js";
 
 export const createNote = asyncHandler(async (req, res) => {
@@ -64,4 +64,27 @@ export const incompleteNote = asyncHandler(async(req, res) => {
       note_id : note_id
     }, "Note updated successfully"));
 
+})
+
+export const deleteNote = asyncHandler(async(req,res) => {
+   
+  const {note_id} = req.body
+
+  if (!note_id) {
+    throw new ApiError(401, "Note Deletion unsuccessful");
+  }
+  
+  const notesAffected = await deleteNoteQuery(note_id)
+
+  return res
+  .status(200)
+  .json(new ApiResponse(
+    200,
+    {
+      notesAffected: notesAffected,
+      note_id: note_id
+    },
+    "Note Deleted Successfully"
+  ))
+ 
 })

@@ -17,3 +17,9 @@ export const incompleteNoteQuery = async(note_id) => {
     const [result] = await mySqlPool.query(sql , [note_id]);
     return result.affectedRows
 }
+
+export const deleteNoteQuery = async(note_id) => {
+    const sql = "DELETE FROM notes WHERE note_id = ?"
+    const [result]  = await mySqlPool.query(sql, [note_id] )
+    return result.affectedRows
+}
