@@ -1,4 +1,5 @@
-import ModalCard from "@/components/modalCard";
+import LandingPageContent from "@/components/LandingContent"
+import ModalCard from "@/components/modalCard"
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
 import FormList from "@/components/FormList";
@@ -7,9 +8,11 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const HomePage = () => {
-  return (
-    <div className="border border-green-500 h-screen w-screen flex flex-row justify-center items-center gap-20">
+
+const LandingPage = () => {
+  
+    return(
+        <div className="border border-green-500 h-screen w-screen flex flex-row justify-center items-center gap-20">
       <div
         className=" flex justify-center items-center border
           font-sans"
@@ -62,10 +65,10 @@ const HomePage = () => {
         className="font-sans flex items-center justify-center
         "
       >
-        <FormList />
+        <LandingPageContent />
       </div>
     </div>
-  );
-};
+    )
+}
 
-export default HomePage;
+export default LandingPage

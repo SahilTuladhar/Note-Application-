@@ -90,9 +90,9 @@ const FormList = () => {
 
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Button className="btn-secondary w-45">{selectedCategory}</Button>
+              <Button className="btn-secondary !bg-blue-200 shadow-sm w-45">{selectedCategory}</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="z-50 gap-2 !p-4 bg-blue-200 !w-45 flex flex-col items-center justify-center">
+            <DropdownMenuContent className="z-50 gap-2 !mt-2 !p-4 bg-blue-200 !w-45 flex flex-col items-center justify-center rounded-lg shadow-md">
               {filters.map((cat) => (
                 <DropdownMenuItem
                   key={cat}
@@ -121,6 +121,7 @@ const FormList = () => {
                 categories={note.categories}
                 createdAt={note.created_at}
                 note_id={note.note_id}
+                selected_category = {selectedCategory}
               />
             ))}
           </div>

@@ -107,16 +107,16 @@ export const useCreateNote = () => {
   });
 };
 
-export const useCompleteNote = () => {
+export const useCompleteNote = (selected_category: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: completeNoteService,
 
     onSuccess: async (data, variables) => {
-      await queryClient.cancelQueries({ queryKey: ["records"] });
+      await queryClient.cancelQueries({ queryKey: ["records" , selected_category]   });
 
-      queryClient.setQueryData<GetUserResponse>(["records"], (oldData) => {
+      queryClient.setQueryData<GetUserResponse>(["records" , selected_category], (oldData) => {
         console.log(oldData);
 
         if (!oldData) return oldData;
@@ -148,16 +148,16 @@ export const useCompleteNote = () => {
   });
 };
 
-export const useIncompletNote = () => {
+export const useIncompletNote = (selected_category: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: incompleteNoteService,
 
     onSuccess: async (data, variables) => {
-      await queryClient.cancelQueries({ queryKey: ["records"] });
+      await queryClient.cancelQueries({ queryKey: ["records" , selected_category] });
 
-      queryClient.setQueryData<GetUserResponse>(["records"] , (oldData) =>{
+      queryClient.setQueryData<GetUserResponse>(["records" , selected_category] , (oldData) =>{
        
         if(!oldData) return oldData;
 

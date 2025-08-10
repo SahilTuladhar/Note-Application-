@@ -23,6 +23,8 @@ type FormCardProps = {
   categories: Category[];
   createdAt: string;
   note_id: number;
+  selected_category: string
+
 };
 
 const FormCard = ({
@@ -32,9 +34,10 @@ const FormCard = ({
   categories,
   createdAt,
   note_id,
+  selected_category
 }: FormCardProps) => {
-  const { mutate: completeMutate } = useCompleteNote();
-  const { mutate: incompleteMutate } = useIncompletNote();
+  const { mutate: completeMutate } = useCompleteNote(selected_category);
+  const { mutate: incompleteMutate } = useIncompletNote(selected_category);
 
   const onCompleteHandler = ( event: React.MouseEvent<HTMLElement> , note_id: number, is_completed: boolean) => {
     
@@ -110,7 +113,7 @@ const FormCard = ({
               </p>
               <div
                 onClick={(event) => onCompleteHandler(event, note_id, is_completed )}
-                className={`border-2  w-8 h-8 rounded-md
+                className={`border-2  w-8 h-8 rounded-md hover:cursor-pointer
           ${
             is_completed
               ? "border-green-700 bg-accent-green"
