@@ -8,6 +8,7 @@ import {
   loginUserService,
   logoutUserService,
   registerUserService,
+  updateNoteService,
 } from "@/services/apiServices";
 import { toast } from "sonner";
 import type {
@@ -17,6 +18,7 @@ import type {
   RegisterResponse,
 } from "@/services/apiServices";
 import { useNavigate } from "react-router-dom";
+import { string } from "zod";
 
 export const useRegister = () => {
   const navigate = useNavigate();
@@ -68,7 +70,6 @@ export const useLogout = () => {
 
     onSuccess: () => {
       toast.success("Logged out Successfully");
-
       navigate("/login-page");
     },
 
@@ -78,10 +79,12 @@ export const useLogout = () => {
   });
 };
 
-export const useGetRecords = () => {
+
+export const useGetRecords = (category : string) => {
   return useQuery({
-    queryKey: ["records"],
-    queryFn: getUserRecordService,
+    queryKey: ["records" , category],
+    queryFn: () =>  getUserRecordService(category),
+
   });
 };
 
@@ -200,6 +203,25 @@ export const useDeleteNote = () => {
     }
   })
  
+}
 
+export const useUpdateNote = () => {
   
+  const queryClient = useQueryClient()
+
+  return useMutation({
+
+    mutationFn: updateNoteService,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey : ["records"]})
+      toast.success("Note successfully updated");
+    },
+
+    onError:(err) => {
+      toast.error(err.message)
+    }
+
+  })
+
 }

@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { createUser, findUserByEmail, getNotesByUserId } from "../models/users.model.js";
+import { createUser, findUserByEmail, getAllNotesByUserId, getNotesByCategory } from "../models/users.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiErrors.js";
 import ApiResponse from "../utils/ApiResponse.js";
@@ -161,15 +161,24 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 const getUserRecords = asyncHandler(async(req,res) => {
 
+  const category = req.query.category;
+
   const userPayload = req.user
 
   if(!userPayload){
     throw new ApiError(401 , "Unauthorized Access")
   }
 
+  let userNotes;
+
   const user = await findUserByEmail(userPayload.email)
 
-  const userNotes = await getNotesByUserId(user.user_id)
+if(!category || category === "All"){
+   userNotes = await getAllNotesByUserId(user.user_id)
+
+}else{
+  userNotes = await getNotesByCategory(user.user_id , category)
+}
 
   if (!user) {
     throw new ApiError(404, "User not found");

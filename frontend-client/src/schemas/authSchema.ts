@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+const CategoryEnum = z.enum(["Personal", "Work", "Todo"]);
 
 export const loginSchema = z.object({
   email: z.string().email("Invalid Email"),
@@ -29,18 +30,17 @@ export const signupSchema = loginSchema
 export type SignUpInputs = z.infer<typeof signupSchema>;
 
 export const NoteFormSchema = z.object({
-  title: z
-  .string()
-  .min(1 , "Title is required"),
+  title: z.string().min(1, "Title is required"),
 
   content: z
-  .string()
-  .min(1 , "Content is required")
-  .max(100 , "Content should not be more than 100 characters")
-  .optional(),
+    .string()
+    .min(1, "Content is required")
+    .max(500, "Content should not be more than 500 characters")
+    .optional(),
 
-  category:z
-  .enum(["Personal", "Work" , "Todo"])
-})
+  category: z
+    .array(CategoryEnum)
+    .min(1, "At least one category must be selected"),
+});
 
-export type NoteFormInputs = z.infer<typeof NoteFormSchema>
+export type NoteFormInputs = z.infer<typeof NoteFormSchema>;

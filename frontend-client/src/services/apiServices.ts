@@ -1,4 +1,6 @@
+import type { Category } from "@/components/FormCard";
 import api from "@/lib/api";
+import { any } from "zod";
 
 type ApiResponse<T> = {
   statusCode: number;
@@ -21,7 +23,7 @@ export type LoginPayload = {
 export type NotePayload = {
   title: string;
   content: string;
-  category: "Personal" | "Todo" | "Work";
+  categories: Category[];
 };
 
 export type CompleteNotePayload = {
@@ -36,6 +38,13 @@ export type DeleteNotePayload = {
   note_id: number;
 };
 
+export type UpdateNotePayload = {
+  note_id: number,
+  title: string,
+  categories: Category[],
+  content: string
+}
+
 export type LoginResponseType = {
   user_id: number;
   username: string;
@@ -48,7 +57,7 @@ export type NoteResponseType = {
   user_id: number;
   title: string;
   content: string;
-  category: "Personal" | "Work" | "Todo";
+  categories: Category[];
   created_at: string;
   updated_at?: string;
   is_completed: number;
@@ -74,6 +83,14 @@ export type DeleteNoteResponseType = {
   note_id: number;
 };
 
+export type UpdateNoteResponseType = {
+  notes_affected: number;
+  note_id: number;
+};
+
+
+
+
 export type RegisterResponse = ApiResponse<number>;
 export type LoginResponse = ApiResponse<LoginResponseType>;
 export type LogoutResponse = ApiResponse<void>;
@@ -82,6 +99,7 @@ export type CreateNoteResponse = ApiResponse<number>;
 export type CompleteNoteResponse = ApiResponse<CompeleteNoteResponseType>;
 export type IncompleteNoteResponse = ApiResponse<IncompeleteNoteResponseType>;
 export type DeleteNoteResponse = ApiResponse<DeleteNoteResponseType>
+export type UpdateNoteResponse = ApiResponse<UpdateNoteResponseType>;
 
 // functions that make call to API endpoints
 
@@ -119,8 +137,10 @@ export const logoutUserService = async (): Promise<LogoutResponse> => {
   return res.data;
 };
 
-export const getUserRecordService = async (): Promise<GetUserResponse> => {
-  const res = await api.get<GetUserResponse>("/users/home-page");
+export const getUserRecordService = async (category : string): Promise<GetUserResponse> => {
+  
+  const queryParams = category !== "All" ? `?category=${category}` : "";
+  const res = await api.get<GetUserResponse>(`/users/home-page${queryParams}`);
 
   return res.data;
 };
@@ -177,3 +197,14 @@ export const deleteNoteService = async(data : DeleteNotePayload): Promise<Delete
     throw new Error(error.message)
   }
 } ;
+
+export const updateNoteService = async(data: UpdateNotePayload): Promise<UpdateNoteResponse> => {
+ 
+  try{
+    const res = await api.patch('/notes/update-note' , data)
+    return res.data
+  } catch(error: any) {
+    throw new Error(error.message)
+  }
+
+}

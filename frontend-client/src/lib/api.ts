@@ -24,9 +24,33 @@ const api = axios.create({
 
 api.interceptors.response.use(
     r => r,
-    err => {
-        return Promise.reject(err.response?.data ?? { message: err.message });
+    // err => {
+    //     return Promise.reject(err.response?.data ?? { message: err.message });
+    // }
+
+    async(err) => {
+      
+        const originalRequest = err.config
+
+        if(err.response?.status === 401 && !originalRequest._retry){
+            originalRequest._retry = true
+
+            try{
+                await api.post("/refresh-token")
+                return api(originalRequest)
+            } catch(refreshError){
+                console.error(refreshError)
+                window.location.href = "/login"
+            }
+
+            return Promise.reject(err)
+
+
+        }
+        
     }
+
+
 )
 
 

@@ -5,6 +5,7 @@ import FormList from "@/components/FormList";
 import { useGetRecords } from "@/hooks/apiHooks";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const HomePage = () => {
   return (
@@ -13,8 +14,8 @@ const HomePage = () => {
         className=" flex justify-center items-center border
           font-sans"
       >
-        <ModalCard className="!relative !h-[750px] !w-80 gap-5">
-          <div className="absolute top-0 left-8 flex items-center text-heading-sm !font-normal">
+        <ModalCard className="!relative !h-[750px] !w-80 !gap-5">
+          <div className="!absolute top-0 left-8 flex items-center text-heading-sm !font-normal">
             <p className="whitespace-nowrap">
               <span className="text-green-600">Leap</span>Notes
             </p>
@@ -25,21 +26,25 @@ const HomePage = () => {
             />
           </div>
           <div
-            className="flex flex-col w-[95%] h-[350px] gap-5
+            className=" !absolute !top-32 flex flex-col w-[85%] h-[200px] gap-5
          "
           >
-            <div className="flex items-center text-body-lg border-b-3 border-blue-200 !p-3 gap-2">
-              <HomeOutlinedIcon />
-              <p>Home</p>
-            </div>
+            <Link to="/home-page">
+              <div className="flex items-center text-body-lg border-b-3 border-blue-200 !p-3 gap-2 hover:border-blue-400 focus:border-blue-400 transition-all duration-350 ease-in-out">
+                <HomeOutlinedIcon />
+                <p>Home</p>
+              </div>
+            </Link>
 
-            <div className="flex items-center text-body-lg border-b-4 border-blue-200 !p-3 gap-2">
-              <FormatListBulletedRoundedIcon />
-              <p>My Lists</p>
-            </div>
+            <Link to="/home-page">
+              <div className="flex items-center text-body-lg border-b-4 border-blue-200 !p-3 gap-2  hover:border-blue-400 focus:border-blue-400 transition-all duration-350 ease-in-out">
+                <FormatListBulletedRoundedIcon />
+                <p>My Lists</p>
+              </div>
+            </Link>
           </div>
 
-          <div className="flex flex-col border w-full gap-4 ">
+          <div className="!absolute top-74 left-4 flex flex-col w-[95%] gap-4 ">
             <p className="text-body-xl font-sans">Index</p>
             <div className="flex flex-row gap-4 items-center ">
               <div className="border-2  w-8 h-8 rounded-md border-green-700 bg-accent-green" />
