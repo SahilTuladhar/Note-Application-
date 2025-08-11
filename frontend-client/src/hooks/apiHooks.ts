@@ -80,10 +80,12 @@ export const useLogout = () => {
 };
 
 
-export const useGetRecords = (category : string) => {
+export const useGetRecords = (category : string , page:number , limit: number) => {
   return useQuery({
-    queryKey: ["records" , category],
-    queryFn: () =>  getUserRecordService(category),
+    queryKey: ["records" , category , page , limit],
+    queryFn: () =>  getUserRecordService(category , page , limit),
+    placeholderData: (prevData) => prevData
+
 
   });
 };

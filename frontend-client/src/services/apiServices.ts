@@ -39,11 +39,11 @@ export type DeleteNotePayload = {
 };
 
 export type UpdateNotePayload = {
-  note_id: number,
-  title: string,
-  categories: Category[],
-  content: string
-}
+  note_id: number;
+  title: string;
+  categories: Category[];
+  content: string;
+};
 
 export type LoginResponseType = {
   user_id: number;
@@ -66,6 +66,9 @@ export type NoteResponseType = {
 export type GetUserResponseType = {
   username: string;
   notes: NoteResponseType[];
+  total: number;
+  totalPages: number;
+  currentPage: number;
 };
 
 export type CompeleteNoteResponseType = {
@@ -88,9 +91,6 @@ export type UpdateNoteResponseType = {
   note_id: number;
 };
 
-
-
-
 export type RegisterResponse = ApiResponse<number>;
 export type LoginResponse = ApiResponse<LoginResponseType>;
 export type LogoutResponse = ApiResponse<void>;
@@ -98,7 +98,7 @@ export type GetUserResponse = ApiResponse<GetUserResponseType>;
 export type CreateNoteResponse = ApiResponse<number>;
 export type CompleteNoteResponse = ApiResponse<CompeleteNoteResponseType>;
 export type IncompleteNoteResponse = ApiResponse<IncompeleteNoteResponseType>;
-export type DeleteNoteResponse = ApiResponse<DeleteNoteResponseType>
+export type DeleteNoteResponse = ApiResponse<DeleteNoteResponseType>;
 export type UpdateNoteResponse = ApiResponse<UpdateNoteResponseType>;
 
 // functions that make call to API endpoints
@@ -137,10 +137,28 @@ export const logoutUserService = async (): Promise<LogoutResponse> => {
   return res.data;
 };
 
-export const getUserRecordService = async (category : string): Promise<GetUserResponse> => {
-  
-  const queryParams = category !== "All" ? `?category=${category}` : "";
-  const res = await api.get<GetUserResponse>(`/users/home-page${queryParams}`);
+export const getUserRecordService = async (
+  category: string,
+  page: number,
+  limit: number
+): Promise<GetUserResponse> => {
+  const params = new URLSearchParams();
+
+  if (category !== "All") {
+    params.append("category", category);
+  }
+
+  params.append("page", page.toString());
+  params.append("limit", limit.toString());
+
+  const res = await api.get<GetUserResponse>(
+    `/users/home-page?${params.toString()}`
+  );
+
+  console.log("FE response", res);
+
+  // const queryParams = category !== "All" ? `?category=${category}` : "?";
+  // const res = await api.get<GetUserResponse>(`/users/home-page${queryParams}&page=${page}&limit=${limit}`);
 
   return res.data;
 };
@@ -187,24 +205,24 @@ export const incompleteNoteService = async (
   }
 };
 
-export const deleteNoteService = async(data : DeleteNotePayload): Promise<DeleteNoteResponse> => {
-  try{
-
-    const res = await api.delete('/notes/delete-note' , {data})
-    return res.data
-
-  }catch(error : any){
-    throw new Error(error.message)
+export const deleteNoteService = async (
+  data: DeleteNotePayload
+): Promise<DeleteNoteResponse> => {
+  try {
+    const res = await api.delete("/notes/delete-note", { data });
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error.message);
   }
-} ;
+};
 
-export const updateNoteService = async(data: UpdateNotePayload): Promise<UpdateNoteResponse> => {
- 
-  try{
-    const res = await api.patch('/notes/update-note' , data)
-    return res.data
-  } catch(error: any) {
-    throw new Error(error.message)
+export const updateNoteService = async (
+  data: UpdateNotePayload
+): Promise<UpdateNoteResponse> => {
+  try {
+    const res = await api.patch("/notes/update-note", data);
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error.message);
   }
-
-}
+};

@@ -49,8 +49,21 @@ const FormList = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const { data, isLoading, isError, refetch, error } =
-    useGetRecords(selectedCategory);
+  const [page, setPage] = useState(1);
+  const limit = 4;
+
+  const { data, isLoading, isError, refetch, error } = useGetRecords(
+    selectedCategory,
+    page,
+    limit
+  );
+
+  console.log("DATAAA", data);
+  
+
+  useEffect(() => {
+    refetch();
+  }, [selectedCategory , page]);
 
   useEffect(() => {
     if (isError && error) {
@@ -68,82 +81,111 @@ const FormList = () => {
     setSelectedCategory(category);
   };
 
-  useEffect(() => {
-    refetch();
-  }, [selectedCategory]);
-
-
   return (
     <ModalCard className="relative !w-[900px] !h-[700px] !min-h-[700px] !max-h-[700px] !justify-start">
-      <div className="w-full !h-full flex flex-col !gap-3 ">
-        <div className="flex flex-row justify-between items-center !pb-1 ">
-          <p className="font-sans text-heading-xs !font-normal">
-            Welcome back, {data?.data.username}
-          </p>
-          <Button className="btn-primary !p-2" onClick={onUserLogout}>
-            Log Out
-          </Button>
-        </div>
+      <>
+        <div className="w-full !h-full flex flex-col !gap-3 ">
+          <div className="flex flex-row justify-between items-center !pb-1 ">
+            <p className="font-sans text-heading-xs !font-normal">
+              Welcome back, {data?.data.username}
+            </p>
+            <Button className="btn-primary !p-2" onClick={onUserLogout}>
+              Log Out
+            </Button>
+          </div>
 
-        <div className="flex flex-row !gap-3 justify-between">
-          <p className="text-heading-xs !font-normal">Notes</p>
+          <div className="flex flex-row !gap-3 justify-between">
+            <p className="text-heading-xs !font-normal">Notes</p>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button className="btn-secondary !bg-blue-200 shadow-sm w-45">{selectedCategory}</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="z-50 gap-2 !mt-2 !p-4 bg-blue-200 !w-45 flex flex-col items-center justify-center rounded-lg shadow-md">
-              {filters.map((cat) => (
-                <DropdownMenuItem
-                  key={cat}
-                  onClick={() => handleSelect(cat)}
-                  className={`border-blue-300 border-b-2 !p-1 !w-full flex items-center justify-center hover:border-b-blue-400 transition-all ease-in-out duration-200
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Button className="btn-secondary !bg-blue-200 shadow-sm w-45">
+                  {selectedCategory}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="z-50 gap-2 !mt-2 !p-4 bg-blue-200 !w-45 flex flex-col items-center justify-center rounded-lg shadow-md">
+                {filters.map((cat) => (
+                  <DropdownMenuItem
+                    key={cat}
+                    onClick={() => handleSelect(cat)}
+                    className={`border-blue-300 border-b-2 !p-1 !w-full flex items-center justify-center hover:border-b-blue-400 transition-all ease-in-out duration-200
               ${selectedCategory === cat ? "font-bold text-blue-700" : ""}
             `}
-                >
-                  {cat}
-                </DropdownMenuItem>
+                  >
+                    {cat}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          {isLoading && <div>Featching Your Data...</div>}
+
+          {notesCount > 0 && !isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 overflow-y-auto ">
+              {data?.data.notes.map((note) => (
+                <FormCard
+                  key={note.note_id}
+                  is_completed={note.is_completed === 0 ? false : true}
+                  title={note.title}
+                  content={note.content}
+                  categories={note.categories}
+                  createdAt={note.created_at}
+                  note_id={note.note_id}
+                  selected_category={selectedCategory}
+                />
               ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              Create a note to get started.
+            </div>
+          )}
+
+          {/* Creating Dialog for Note Form */}
+
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button className="hover:cursor-pointer absolute top-[95%] left-[45.5%] btn-primary !bg-accent-green w-16 h-16 !p-3 rounded-full">
+                <AddRoundedIcon />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <NoteForm onClose={() => setOpen(false)} source="create-note" />
+            </DialogContent>
+          </Dialog>
         </div>
 
-        {isLoading && <div>Featching Your Data...</div>}
+        {/* Pagination Controls UI */}
+        
+        {data?.data.totalPages && data.data.totalPages >= 1 && (
+          <div className="flex justify-center gap-4 mt-4">
 
-        {notesCount > 0 && !isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 overflow-y-auto ">
-            {data?.data.notes.map((note) => (
-              <FormCard
-                key={note.note_id}
-                is_completed={note.is_completed === 0 ? false : true}
-                title={note.title}
-                content={note.content}
-                categories={note.categories}
-                createdAt={note.created_at}
-                note_id={note.note_id}
-                selected_category = {selectedCategory}
-              />
-            ))}
+            <Button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p-1)}
+            className="btn-primary w-20"
+            >
+              Previous
+            </Button>
+
+            <span>
+              Page {page} of {data?.data.totalPages}
+            </span>
+
+            <Button
+            disabled = {page === data?.data.totalPages}
+            onClick={() => setPage((p) => p+1)}
+            className="btn-primary w-20"
+            >
+              Next
+            </Button>
+
           </div>
-        ) : (
-          <div className="flex items-center justify-center">
-            Create a note to get started.
-          </div>
+
         )}
 
-        {/* Creating Dialog for Note Form */}
-
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button className="hover:cursor-pointer absolute top-[95%] left-[45.5%] btn-primary !bg-accent-green w-16 h-16 !p-3 rounded-full">
-              <AddRoundedIcon />
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <NoteForm onClose={() => setOpen(false)} source="create-note" />
-          </DialogContent>
-        </Dialog>
-      </div>
+      </>
     </ModalCard>
   );
 };

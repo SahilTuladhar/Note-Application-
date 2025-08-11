@@ -1,5 +1,10 @@
 import bcrypt from "bcrypt";
-import { createUser, findUserByEmail, getAllNotesByUserId, getNotesByCategory } from "../models/users.model.js";
+import {
+  createUser,
+  findUserByEmail,
+  getAllNotesByUserId,
+  getNotesByCategory,
+} from "../models/users.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiErrors.js";
 import ApiResponse from "../utils/ApiResponse.js";
@@ -96,7 +101,6 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
-    
   };
 
   return res
@@ -153,50 +157,65 @@ const logoutUser = asyncHandler(async (req, res) => {
   });
 
   return res
-  .status(200)
-  .json(
-    new ApiResponse(200 , null , "Logged Out Successfully")
-  )
+    .status(200)
+    .json(new ApiResponse(200, null, "Logged Out Successfully"));
 });
 
-const getUserRecords = asyncHandler(async(req,res) => {
-
+const getUserRecords = asyncHandler(async (req, res) => {
   const category = req.query.category;
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const offset = (page - 1) * limit;
 
-  const userPayload = req.user
+  const userPayload = req.user;
 
-  if(!userPayload){
-    throw new ApiError(401 , "Unauthorized Access")
+  if (!userPayload) {
+    throw new ApiError(401, "Unauthorized Access");
   }
 
-  let userNotes;
-
-  const user = await findUserByEmail(userPayload.email)
-
-if(!category || category === "All"){
-   userNotes = await getAllNotesByUserId(user.user_id)
-
-}else{
-  userNotes = await getNotesByCategory(user.user_id , category)
-}
+  let userNotes, totalNotes;
+  const user = await findUserByEmail(userPayload.email);
 
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  return res
-  .status(200)
-  .json(
+  if (!category || category === "All") {
+    const { notes, total } = await getAllNotesByUserId(
+      user.user_id,
+      limit,
+      offset
+    );
+    userNotes = notes;
+    totalNotes = total;
+  } else {
+    const { notes, total } = await getNotesByCategory(
+      user.user_id,
+      category,
+      limit,
+      offset
+    );
+    userNotes = notes;
+    totalNotes = total;
+  }
+
+  console.log("NOTES:" , userNotes);
+  console.log("TOTALNOTES", totalNotes);
+  
+
+  return res.status(200).json(
     new ApiResponse(
       200,
-      {username : user.username,
-        notes : userNotes
+      {
+        username: user.username,
+        notes: userNotes,
+        total: totalNotes,
+        totalPages: Math.ceil(totalNotes / limit),
+        currentPage: page,
       },
       "User Records Retrieved Successfully"
     )
-  )
+  );
+});
 
-})
-
-export { registerUser, loginUser, refreshToken , logoutUser , getUserRecords};
-
+export { registerUser, loginUser, refreshToken, logoutUser, getUserRecords };
