@@ -133,6 +133,8 @@ const FormList = () => {
                   createdAt={note.created_at}
                   note_id={note.note_id}
                   selected_category={selectedCategory}
+                  page ={page}
+                  limit={limit}
                 />
               ))}
             </div>

@@ -106,35 +106,51 @@ export type UpdateNoteResponse = ApiResponse<UpdateNoteResponseType>;
 export const registerUserService = async (
   data: RegisterPayload
 ): Promise<RegisterResponse> => {
-  const res = await api.post<RegisterResponse>("/users/register", data);
+  try {
+    const res = await api.post<RegisterResponse>("/users/register", data);
 
-  if (res.status !== 200 && res.status !== 201) {
-    throw new Error("Failed Sign In Attempt");
+    if (res.status !== 200 && res.status !== 201) {
+      throw new Error("Failed Sign Up Attempt");
+    }
+
+    return res.data;
+  } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error("Failed Sign Up Attempt");
   }
-
-  return res.data;
 };
 
 export const loginUserService = async (
   data: LoginPayload
 ): Promise<LoginResponse> => {
-  const res = await api.post<LoginResponse>("/users/login-user", data);
-
-  if (res.status !== 200) {
+  try {
+    const res = await api.post<LoginResponse>("/users/login-user", data);
+    return res.data;
+  } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
     throw new Error("Failed Log in attempt");
   }
-
-  return res.data;
 };
 
 export const logoutUserService = async (): Promise<LogoutResponse> => {
-  const res = await api.post<LogoutResponse>("/users/logout-user");
+  try {
+    const res = await api.post<LogoutResponse>("/users/logout-user");
 
-  if (res.status !== 200) {
+    if (res.status !== 200) {
+      throw new Error("Failed To Log Out");
+    }
+
+    return res.data;
+  } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
     throw new Error("Failed To Log Out");
   }
-
-  return res.data;
 };
 
 export const getUserRecordService = async (
@@ -142,37 +158,45 @@ export const getUserRecordService = async (
   page: number,
   limit: number
 ): Promise<GetUserResponse> => {
-  const params = new URLSearchParams();
+  try {
+    const params = new URLSearchParams();
 
-  if (category !== "All") {
-    params.append("category", category);
+    if (category !== "All") {
+      params.append("category", category);
+    }
+
+    params.append("page", page.toString());
+    params.append("limit", limit.toString());
+
+    const res = await api.get<GetUserResponse>(
+      `/users/home-page?${params.toString()}`
+    );
+
+    return res.data;
+  } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error("Failed to fetch user records");
   }
-
-  params.append("page", page.toString());
-  params.append("limit", limit.toString());
-
-  const res = await api.get<GetUserResponse>(
-    `/users/home-page?${params.toString()}`
-  );
-
-  console.log("FE response", res);
-
-  // const queryParams = category !== "All" ? `?category=${category}` : "?";
-  // const res = await api.get<GetUserResponse>(`/users/home-page${queryParams}&page=${page}&limit=${limit}`);
-
-  return res.data;
 };
-
 export const createNoteService = async (
   data: NotePayload
 ): Promise<CreateNoteResponse> => {
-  const res = await api.post<CreateNoteResponse>("/notes/create-note", data);
+  try {
+    const res = await api.post<CreateNoteResponse>("/notes/create-note", data);
 
-  if (res.status !== 200 && res.status !== 201) {
+    if (res.status !== 200 && res.status !== 201) {
+      throw new Error("Failed to Create Note");
+    }
+
+    return res.data;
+  } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
     throw new Error("Failed to Create Note");
   }
-
-  return res.data;
 };
 
 export const completeNoteService = async (
@@ -183,9 +207,11 @@ export const completeNoteService = async (
       "/notes/complete-note",
       data
     );
-
     return res.data;
   } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
     throw new Error(error.message);
   }
 };
@@ -198,9 +224,11 @@ export const incompleteNoteService = async (
       "/notes/incomplete-note",
       data
     );
-
     return res.data;
   } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
     throw new Error(error.message);
   }
 };
@@ -212,6 +240,9 @@ export const deleteNoteService = async (
     const res = await api.delete("/notes/delete-note", { data });
     return res.data;
   } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
     throw new Error(error.message);
   }
 };
@@ -223,6 +254,9 @@ export const updateNoteService = async (
     const res = await api.patch("/notes/update-note", data);
     return res.data;
   } catch (error: any) {
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    }
     throw new Error(error.message);
   }
 };

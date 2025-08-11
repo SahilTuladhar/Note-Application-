@@ -182,7 +182,7 @@ const NoteForm = ({ intialData, source, note_id, onClose }: NoteFormProps) => {
                     <DropdownMenuContent
                       align="start"
                       sideOffset={4}
-                      className="w-full min-w-[200px] max-w-[320px] p-1 rounded-md border border-gray-200 shadow-md bg-white"
+                      className="!w-full !min-w-[200px] max-w-[320px]  gap-5 rounded-md border border-gray-200  bg-white"
                     >
                       {categories.map((category) => {
                         const checked = field.value?.includes(category);
@@ -196,7 +196,7 @@ const NoteForm = ({ intialData, source, note_id, onClose }: NoteFormProps) => {
                                 : field.value?.filter((c) => c !== category);
                               field.onChange(updated);
                             }}
-                            className="flex justify-between items-center w-full px-3 py-2 rounded-md cursor-pointer select-none
+                            className="flex justify-between items-center !w-full !px-4 !py-4 cursor-pointer select-none
                     data-[state=checked]:bg-blue-100
                     data-[highlighted]:bg-blue-50
                     hover:bg-blue-50

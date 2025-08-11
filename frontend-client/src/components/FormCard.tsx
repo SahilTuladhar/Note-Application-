@@ -23,7 +23,9 @@ type FormCardProps = {
   categories: Category[];
   createdAt: string;
   note_id: number;
-  selected_category: string
+  selected_category: string,
+  page: number,
+  limit: number
 
 };
 
@@ -34,10 +36,12 @@ const FormCard = ({
   categories,
   createdAt,
   note_id,
-  selected_category
+  selected_category,
+  page,
+  limit
 }: FormCardProps) => {
-  const { mutate: completeMutate } = useCompleteNote(selected_category);
-  const { mutate: incompleteMutate } = useIncompletNote(selected_category);
+  const { mutate: completeMutate } = useCompleteNote(selected_category , page , limit);
+  const { mutate: incompleteMutate } = useIncompletNote(selected_category , page , limit);
 
   const onCompleteHandler = ( event: React.MouseEvent<HTMLElement> , note_id: number, is_completed: boolean) => {
     

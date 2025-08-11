@@ -52,7 +52,7 @@ export const useLogin = () => {
       toast.success("Logged in Successfully");
       console.log("Successful Log:", data);
 
-      navigate("/home-page");
+      navigate("/landing-page");
     },
 
     onError: (error: Error) => {
@@ -109,16 +109,16 @@ export const useCreateNote = () => {
   });
 };
 
-export const useCompleteNote = (selected_category: string) => {
+export const useCompleteNote = (selected_category: string , page:number , limit: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: completeNoteService,
 
     onSuccess: async (data, variables) => {
-      await queryClient.cancelQueries({ queryKey: ["records" , selected_category]   });
+      await queryClient.cancelQueries({ queryKey: ["records" , selected_category , page , limit ]   });
 
-      queryClient.setQueryData<GetUserResponse>(["records" , selected_category], (oldData) => {
+      queryClient.setQueryData<GetUserResponse>(["records" , selected_category ,  page , limit], (oldData) => {
         console.log(oldData);
 
         if (!oldData) return oldData;
@@ -150,16 +150,16 @@ export const useCompleteNote = (selected_category: string) => {
   });
 };
 
-export const useIncompletNote = (selected_category: string) => {
+export const useIncompletNote = (selected_category: string, page:number , limit: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: incompleteNoteService,
 
     onSuccess: async (data, variables) => {
-      await queryClient.cancelQueries({ queryKey: ["records" , selected_category] });
+      await queryClient.cancelQueries({ queryKey: ["records" , selected_category, page , limit] });
 
-      queryClient.setQueryData<GetUserResponse>(["records" , selected_category] , (oldData) =>{
+      queryClient.setQueryData<GetUserResponse>(["records" , selected_category, page , limit] , (oldData) =>{
        
         if(!oldData) return oldData;
 
