@@ -96,7 +96,7 @@ const LoginPage = () => {
             />
 
             <Button type="submit" className="btn-primary w-full">
-              <a href="/landing-page">Log In</a>
+              Log In
             </Button>
           </form>
         </Form>
