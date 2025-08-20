@@ -6,6 +6,7 @@ import type { SignUpInputs } from "../schemas/authSchema";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import emailjs from "@emailjs/browser";
 
 import {
   Form,
@@ -15,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useRegister } from "@/hooks/apiHooks";
+import { useRef } from "react";
 
 const RegisterPage = () => {
   const form = useForm<SignUpInputs>({
@@ -28,10 +30,36 @@ const RegisterPage = () => {
     },
   });
 
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const sendEmail = () => {
+    if (!formRef.current) return;
+
+    emailjs
+      .sendForm(
+        "service_2b2d6fg",
+        "template_yfszmho",
+        formRef.current as HTMLFormElement,
+        {
+          publicKey: "hSPwYG3T8v4a1qyJU",
+        }
+      )
+      .then(() => {
+        console.log("SUCESSSUF");
+        toast.success("Email successfully sent");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Failed to send Email");
+      });
+  };
+
   const { mutate } = useRegister();
 
   const onSubmit = (data: SignUpInputs) => {
     console.log("Register Data", data);
+
+    sendEmail();
 
     mutate({
       username: data.username,
@@ -52,6 +80,7 @@ const RegisterPage = () => {
         <h1 className="text-body-lg font-sans">Sign Up</h1>
         <Form {...form}>
           <form
+            ref={formRef}
             onSubmit={form.handleSubmit(onSubmit, (errors) => {
               const firstError = Object.values(errors)[0];
 
